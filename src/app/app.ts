@@ -6,22 +6,32 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet, MatToolbarModule],
   template: `
-    <mat-toolbar>My Contatcfs</mat-toolbar>
+    <mat-toolbar>My Contatcs</mat-toolbar>
 
     <router-outlet />
   `,
-  styles: [`
-    mat-toolbar {
-      justify-content: space-between;
+  styles: [
+    `
+      @use '@angular/material' as mat;
 
-      @include mat.toolbar-overrides (
-        (
-          container-background-color: var(--mat-sys-primary),
-          container-text-color: var(--mat-sys-on-primary),
-        )
-      );
-    }
-    `],
+      mat-toolbar {
+        justify-content: space-between;
+
+        @include mat.toolbar-overrides(
+          (
+            container-background-color: var(--mat-sys-primary),
+            container-text-color: var(--mat-sys-on-primary),
+          )
+        );
+
+        @include mat.icon-button-overrides(
+          (
+            icon-color: var(--mat-sys-on-primary),
+          )
+        );
+      }
+    `,
+  ],
 })
 export class App {
   protected readonly title = signal('angular-crud');
