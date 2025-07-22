@@ -2,10 +2,11 @@ import { Component, inject, resource, signal } from '@angular/core';
 import { Contact } from '../../model/contact';
 import { MatListModule } from '@angular/material/list';
 import { ApiService } from '../../services/api-service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-contacts-list',
-  imports: [MatListModule],
+  imports: [MatListModule, MatProgressSpinnerModule],
   template: `
     <mat-list>
       @for (contact of contactsResource.value(); track contact.id) {
@@ -15,6 +16,9 @@ import { ApiService } from '../../services/api-service';
       </mat-list-item>
       }
     </mat-list>
+    @if (contactsResource.isLoading()) {
+      <mat-progress-spinner mode="indeterminate" />
+    }
   `,
   styles: ``,
 })
