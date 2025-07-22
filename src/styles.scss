@@ -40,6 +40,7 @@ body {
 }
 
 mat-progress-spinner {
+  z-index: 5;
   position: absolute;
   top: 50%;
   left: 50%;

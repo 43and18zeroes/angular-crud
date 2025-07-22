@@ -1,4 +1,4 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { Contact } from '../../model/contact';
 import { MatListModule } from '@angular/material/list';
 import { ApiService } from '../../services/api-service';
@@ -8,7 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-contacts-list',
-  imports: [MatListModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
+  imports: [
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
   template: `
     <mat-list>
       @for (contact of contactsResource.value(); track contact.id) {
@@ -16,15 +21,15 @@ import { MatButtonModule } from '@angular/material/button';
         <h3 matListItemTitle>{{ contact.name }}</h3>
         <p matListItemLine>{{ contact.email }}</p>
         <div matListItemMeta>
-          <button mat-icon-button>
+          <button mat-icon-button (click)="deleteContact(contact.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </mat-list-item>
       }
     </mat-list>
-    @if (contactsResource.isLoading()) {
-      <mat-progress-spinner mode="indeterminate" />
+    @if (loading()) {
+    <mat-progress-spinner mode="indeterminate" />
     }
   `,
   styles: ``,
@@ -32,7 +37,25 @@ import { MatButtonModule } from '@angular/material/button';
 export class ContactsList {
   apiService = inject(ApiService);
 
+  deleting = signal(false);
+
+  // loading = computed(() => this.contactsResource.isLoading || this.deleting());
+
+  loading = computed(() => {
+    const isLoading = this.contactsResource.isLoading || this.deleting();
+    // Fügt eine Konsolenausgabe hinzu
+    console.log('Current loading state:', isLoading);
+    return isLoading;
+  });
+
   contactsResource = resource({
     loader: () => this.apiService.getContacts(),
-  })
+  });
+
+  async deleteContact(id: string) {
+    this.deleting.set(true);
+    await this.apiService.deleteContact(id);
+    this.deleting.set(false);
+    this.contactsResource.reload();
+  }
 }
