@@ -1,10 +1,20 @@
 import { Component, signal } from '@angular/core';
 import { Contact } from '../../model/contact';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-contacts-list',
-  imports: [],
-  template: ` <p>contacts-list works!</p> `,
+  imports: [MatListModule],
+  template: `
+    <mat-list>
+      @for (contact of contacts(); track contact.id) {
+      <mat-list-item>
+        <h3 matListItemTitle>{{ contact.name }}</h3>
+        <p matListItemLine>{{ contact.email }}</p>
+      </mat-list-item>
+      }
+    </mat-list>
+  `,
   styles: ``,
 })
 export class ContactsList {
