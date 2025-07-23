@@ -1,12 +1,25 @@
 import { Component, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbarModule],
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    RouterLink,
+    MatIconModule,
+    MatButtonModule,
+  ],
   template: `
-    <mat-toolbar>My Contatcs</mat-toolbar>
+    <mat-toolbar
+      >My Contatcs
+      <a mat-icon-button routerLink="/add">
+        <mat-icon>add_circle</mat-icon>
+      </a>
+    </mat-toolbar>
 
     <router-outlet />
   `,
