@@ -39,14 +39,7 @@ export class ContactsList {
 
   deleting = signal(false);
 
-  // loading = computed(() => this.contactsResource.isLoading || this.deleting());
-
-  loading = computed(() => {
-    const isLoading = this.contactsResource.isLoading || this.deleting();
-    // Fügt eine Konsolenausgabe hinzu
-    console.log('Current loading state:', isLoading);
-    return isLoading;
-  });
+  loading = computed(() => this.contactsResource.isLoading || this.deleting());
 
   contactsResource = resource({
     loader: () => this.apiService.getContacts(),
