@@ -40,6 +40,11 @@ import { MatInputModule } from '@angular/material/input';
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
     }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+    }
   `,
 })
 export class AddContact {}
