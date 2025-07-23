@@ -20,17 +20,22 @@ import { MatInputModule } from '@angular/material/input';
         <mat-label>Phone</mat-label>
         <input matInput />
       </mat-form-field>
+      <div>
+        <button mat-flat-button>Save</button>
+        <button mat-raised-button>Cancel</button>
+      </div>
     </form>
   `,
   styles: `
     :host {
       padding: 16px;
+      display: block;
     }
-    
+
     .fields {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 16px;
     }
   `
 })
