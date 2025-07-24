@@ -1,13 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { ApiService } from '../../services/api-service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-add-contact',
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, FormsModule, MatProgressSpinnerModule],
   template: `
     <form (ngSubmit)="save()">
       <h2>Add contact</h2>
@@ -30,6 +32,9 @@ import { RouterLink } from '@angular/router';
         <button type="button" mat-raised-button routerLink="/">Cancel</button>
       </div>
     </form>
+        @if (saving()) {
+    <mat-progress-spinner mode="indeterminate" />
+    }
   `,
   styles: `
     :host {
@@ -50,12 +55,24 @@ import { RouterLink } from '@angular/router';
   `,
 })
 export class AddContact {
+  apiService = inject(ApiService);
+  router = inject(Router);
 
   name = signal('');
   email = signal('');
   phone = signal('');
 
-  save() {
-    console.log(this.name(), this.email(), this.phone());
+  saving = signal(false);
+
+  async save() {
+    this.saving.set(true);
+    await this.apiService.addContact({
+      id: '',
+      name: this.name(),
+      email: this.email(),
+      phone: this.phone(),
+    });
+    this.saving.set(false);
+    this.router.navigate(['/']);
   }
 }
