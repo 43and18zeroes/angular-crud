@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-contact',
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink],
   template: `
     <form>
       <h2>Add contact</h2>
@@ -25,7 +26,7 @@ import { MatInputModule } from '@angular/material/input';
       </div>
       <div class="actions">
         <button mat-flat-button>Save</button>
-        <button mat-raised-button>Cancel</button>
+        <button mat-raised-button routerLink="/">Cancel</button>
       </div>
     </form>
   `,
