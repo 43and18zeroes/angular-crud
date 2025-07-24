@@ -5,6 +5,7 @@ import { ApiService } from '../../services/api-service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contacts-list',
@@ -13,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
+    RouterLink
   ],
   template: `
     <mat-list>
@@ -21,6 +23,9 @@ import { MatButtonModule } from '@angular/material/button';
         <h3 matListItemTitle>{{ contact.name }}</h3>
         <p matListItemLine>{{ contact.email }}</p>
         <div matListItemMeta>
+          <button mat-icon-button routerLink="/edit/{{ contact.id }}" >
+            <mat-icon>edit</mat-icon>
+          </button>
           <button mat-icon-button (click)="deleteContact(contact.id)">
             <mat-icon>delete</mat-icon>
           </button>
