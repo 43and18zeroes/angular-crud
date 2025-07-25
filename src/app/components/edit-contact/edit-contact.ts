@@ -12,11 +12,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-edit-contact',
   standalone: true, // Assuming this is a standalone component
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, MatProgressSpinnerModule],
   template: `
     <form (ngSubmit)="save()">
       <h2>Edit contact</h2>
@@ -39,6 +41,9 @@ import { MatButtonModule } from '@angular/material/button';
         <button type="button" mat-raised-button routerLink="/">Cancel</button>
       </div>
     </form>
+    @if (saving()) {
+    <mat-progress-spinner mode="indeterminate" />
+    }
   `,
   styles: `
     :host {
@@ -61,10 +66,15 @@ import { MatButtonModule } from '@angular/material/button';
 export class EditContact {
   id = input.required<string>();
   apiService = inject(ApiService);
+  router = inject(Router);
 
   name = linkedSignal(() => this.contactResource.value()?.name ?? '');
   email = linkedSignal(() => this.contactResource.value()?.email ?? '');
   phone = linkedSignal(() => this.contactResource.value()?.phone ?? '');
+
+  saving = signal(false);
+
+  loading = computed(() => this.contactResource.isLoading() || this.saving());
 
   private contactId = computed(() => this.id());
 
@@ -79,11 +89,14 @@ export class EditContact {
   });
 
   async save() {
+    this.saving.set(true);
     await this.apiService.updateContact({
       id: this.id(),
       name: this.name(),
       email: this.email(),
       phone: this.phone(),
     });
+    this.saving.set(false);
+    this.router.navigate(['/']);
   }
 }
