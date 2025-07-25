@@ -9,7 +9,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-add-contact',
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink, FormsModule, MatProgressSpinnerModule],
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterLink,
+    FormsModule,
+    MatProgressSpinnerModule,
+  ],
   template: `
     <form (ngSubmit)="save()">
       <h2>Add contact</h2>
@@ -32,7 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         <button type="button" mat-raised-button routerLink="/">Cancel</button>
       </div>
     </form>
-        @if (saving()) {
+    @if (saving()) {
     <mat-progress-spinner mode="indeterminate" />
     }
   `,
