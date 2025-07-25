@@ -5,17 +5,20 @@ import {
   resource,
   computed,
   signal,
+  linkedSignal,
 } from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-edit-contact',
   standalone: true, // Assuming this is a standalone component
-  imports: [MatFormFieldModule, FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule],
   template: `
-    <form>
+    <form (ngSubmit)="save()">
       <h2>Edit contact</h2>
       <div class="fields">
         <mat-form-field>
@@ -37,15 +40,31 @@ import { FormsModule } from '@angular/forms';
       </div>
     </form>
   `,
-  styles: ``,
+  styles: `
+    :host {
+      padding: 16px;
+      display: block;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+    }
+  `,
 })
 export class EditContact {
-  id = input<string | undefined>();
+  id = input.required<string>();
   apiService = inject(ApiService);
 
-  name = signal('');
-  email = signal('');
-  phone = signal('');
+  name = linkedSignal(() => this.contactResource.value()?.name ?? '');
+  email = linkedSignal(() => this.contactResource.value()?.email ?? '');
+  phone = linkedSignal(() => this.contactResource.value()?.phone ?? '');
 
   private contactId = computed(() => this.id());
 
@@ -58,4 +77,13 @@ export class EditContact {
       return Promise.resolve(undefined);
     },
   });
+
+  async save() {
+    await this.apiService.updateContact({
+      id: this.id(),
+      name: this.name(),
+      email: this.email(),
+      phone: this.phone(),
+    });
+  }
 }
